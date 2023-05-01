@@ -73,7 +73,11 @@ function readTile(args, buffer, callback) {
     if (!Array.isArray(layers))
         layers = [layers]
 
-    vt2geojson(args, tile, layers, callback)
+    if (args.type === 'vt2json') {
+        vt2json(args, tile, layers, callback);
+    } else {
+        vt2geojson(args, tile, layers, callback);
+    }
 }
 
 function vt2geojson(args, tile, layers, callback) {
