@@ -73,6 +73,10 @@ function readTile(args, buffer, callback) {
     if (!Array.isArray(layers))
         layers = [layers]
 
+    vt2geojson(args, tile, layers, callback)
+}
+
+function vt2geojson(args, tile, layers, callback) {
     var collection = {type: 'FeatureCollection', features: []};
 
     layers.forEach(function (layerID) {
@@ -80,8 +84,25 @@ function readTile(args, buffer, callback) {
         if (layer) {
             for (var i = 0; i < layer.length; i++) {
                 var feature = layer.feature(i).toGeoJSON(args.x, args.y, args.z);
-                if (layers.length > 1) feature.properties.vt_layer = layerID;
+                feature.properties.vt_layer = layerID;
                 collection.features.push(feature);
+            }
+        }
+    });
+
+    callback(null, collection);
+}
+
+function vt2json(args, tile, layers, callback) {
+    var collection = {};
+
+    layers.forEach(function (layerID) {
+        var layer = tile.layers[layerID];
+        if (layer) {
+            collection[layerID] = {type: 'FeatureCollection', features: []};
+            for (var i = 0; i < layer.length; i++) {
+                var feature = layer.feature(i).toGeoJSON(args.x, args.y, args.z);
+                collection[layerID].features.push(feature);
             }
         }
     });

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var vt2geojson = require('./');
+var vt2json = require('.');
 var yargs = require('yargs');
 
 var args = yargs
@@ -26,7 +26,7 @@ var args = yargs
 
 args.uri = args._[0];
 
-vt2geojson(args, function (err, geojson) {
+vt2json(args, function (err, geojson) {
     if (err) {
         console.error(err.message);
         process.exit(-1);
